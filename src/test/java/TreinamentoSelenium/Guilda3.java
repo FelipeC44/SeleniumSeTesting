@@ -1,5 +1,6 @@
 package TreinamentoSelenium;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -67,4 +68,33 @@ public class Guilda3 {
 
         comboBox.selectByValue("option3");
     }
+    @Test
+    public void loginComSucesso(){
+        /* acessar pagina de login do heroku app
+           realizar login com usuario e senha
+           clicar no botao sing in
+           validar mensagem de area restrita
+         */
+        String url = "https://the-internet.herokuapp.com/login";
+        String usuario = "tomsmith";
+        String senha = "SuperSecretPassword!";
+        String mensagemEsperada = "Welcome to the Secure Area. When you are done click logout below.";
+        String parteAlertaEsperado = "logged";
+
+        WebDriver driver = new EdgeDriver();
+        driver.navigate().to(url);
+        driver.findElement(By.id("username")).sendKeys(usuario);
+        driver.findElement(By.id("password")).sendKeys(senha);
+        driver.findElement(By.xpath("//*[@class='fa fa-2x fa-sign-in']")).click();
+        String mensagemRecebida = driver.findElement(By.className("subheader")).getText();
+        //ou
+        String alertaRecebido = driver.findElement(By.id("flash")).getText();
+        driver.quit();
+
+        Assert.assertEquals(mensagemRecebida, mensagemEsperada);
+        //ou
+        Assert.assertTrue(alertaRecebido.contains(parteAlertaEsperado));
+
+    }
+
 }
